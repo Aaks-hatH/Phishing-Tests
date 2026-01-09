@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Popup Chain Test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>body{font-family:Arial;background:#fff;padding:30px}</style>
+</head>
+<body>
+  <h2>Popup Chain</h2>
+  <p>This test will open a popup that navigates to a suspicious host (brand-impersonation).</p>
+  <button id="openBtn">Open Malicious Popup</button>
+
+  <script>
+    document.getElementById('openBtn').addEventListener('click', () => {
+      // open a popup; the popup will set location to a suspicious host
+      const w = window.open('', '_blank', 'width=420,height=560');
+      if (!w) { alert('Popup blocked by browser - test the click again'); return; }
+      // Write a small page that will navigate to an impersonation host
+      w.document.write('<html><body><p>Redirecting...</p><script>setTimeout(()=>{ window.location.href = "http://paypal-secure-verification.net"; }, 500);<\/script></body></html>');
+    });
+  </script>
+</body>
+</html>

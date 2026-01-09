@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Obfuscated Redirect (Test)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>body{font-family:system-ui;padding:40px;background:#081229;color:#fff;text-align:center}</style>
+</head>
+<body>
+  <h2>Obfuscated Redirect</h2>
+  <p>This page will build a redirect via mildly obfuscated JS to simulate cloaking behavior.</p>
+  <script>
+    // Compose redirect via split/join to avoid trivial pattern detection
+    (function(){
+      const parts = ['http','s:','','//','abc.','trycloudflare','.com','/phish'];
+      const url = parts.join('');
+      // do a delayed redirect
+      setTimeout(() => {
+        // use replace to avoid adding history entries
+        window.location.replace(url);
+      }, 2000);
+    })();
+  </script>
+  <p><small>Should be caught by redirect integrity / tunneler heuristics.</small></p>
+</body>
+</html>

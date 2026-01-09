@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>PayPal Secure Verification (Test Typosquat)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#ffffff;color:#111;padding:40px;text-align:center}
+    .card{max-width:420px;margin:0 auto;padding:25px;border-radius:8px;border:1px solid #ddd}
+    .logo{width:140px;margin-bottom:12px}
+    input{display:block;width:100%;padding:10px;margin:10px 0;border-radius:6px;border:1px solid #ccc}
+    button{background:#0070ba;color:#fff;padding:10px 14px;border:none;border-radius:6px;cursor:pointer}
+    small{display:block;margin-top:12px;color:#888}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- Note: page host should be a typosquat domain you create (e.g. paypal-secure-real.test) -->
+    <img class="logo" src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" alt="PayPal (test)">
+    <h2>PayPal Account Verification</h2>
+    <p>Please sign in to verify your account.</p>
+
+    <input type="text" placeholder="Email or phone">
+    <input type="password" placeholder="Password">
+    <button onclick="fakeSubmit()">Sign In</button>
+    <small>Test page: brand imagery + password field to trigger blocking</small>
+  </div>
+
+  <script>
+    function fakeSubmit() {
+      alert('Fake submit (test). This page should be detected by the extension.');
+    }
+  </script>
+</body>
+</html>

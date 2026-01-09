@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Drive-by Download Test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>body{font-family:system-ui;background:#07101a;color:#e6eef8;padding:40px;text-align:center}</style>
+</head>
+<body>
+  <h2>Drive-by Download Simulation</h2>
+  <p>Auto-creating a blob and initiating a download in 3 seconds.</p>
+  <p><small>This should be detected and canceled by the extension's download protection.</small></p>
+
+  <script>
+    setTimeout(() => {
+      try {
+        const content = "This is a simulated malicious payload for testing CoreGuard.";
+        const blob = new Blob([content], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'malicious_payload.exe'; // suspicious filename
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(url);
+        a.remove();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 3000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Shortener Redirect Test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- meta refresh to a tunneler-like domain (this should escalate/block) -->
+  <meta http-equiv="refresh" content="3;url=https://abc.trycloudflare.com/fakepath">
+  <style>body{font-family:Arial;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}</style>
+</head>
+<body>
+  <div style="text-align:center">
+    <h2>Redirecting...</h2>
+    <p>You will be redirected in 3 seconds (test).</p>
+    <p><small>If your extension blocks tunneler redirects this should be intercepted.</small></p>
+  </div>
+</body>
+</html>

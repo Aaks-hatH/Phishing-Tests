@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Iframe Phish Test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>body{font-family:Arial;padding:20px;background:#f8fafc} iframe{width:100%;height:420px;border:1px solid #ddd;border-radius:8px}</style>
+</head>
+<body>
+  <h2>Embedded Credential Frame</h2>
+  <p>Below is an iframe loading a simulated credential form (external). The extension should analyze & block.</p>
+  <!-- You may host the framed page under a different host to simulate cross-origin credential harvest -->
+  <iframe srcdoc='
+    <html><body style="font-family:Arial;text-align:center;padding:30px">
+      <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" width="120">
+      <h3>Sign in</h3>
+      <input type="text" placeholder="Email" style="display:block;margin:10px auto;padding:8px;width:80%">
+      <input type="password" placeholder="Password" style="display:block;margin:10px auto;padding:8px;width:80%">
+      <button style="padding:8px 12px">Sign in</button>
+    </body></html>
+  '></iframe>
+  <p><small>Frame uses inline srcdoc for demo; try hosting an equivalent cross-origin page for additional testing.</small></p>
+</body>
+</html>

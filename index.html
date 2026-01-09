@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CoreGuard Test Lab — Extended</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;background:#07101a;color:#e6eef8;padding:30px;}
+    h1{color:#00bceb;margin:0 0 10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:20px}
+    .card{background:#0f172a;padding:16px;border-radius:10px;border:1px solid #1e293b}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:#00bceb;color:#021018;text-decoration:none;font-weight:700}
+    p{color:#94a3b8;font-size:14px}
+    small{color:#6b7280}
+  </style>
+</head>
+<body>
+  <h1>CoreGuard Extended Test Lab</h1>
+  <p>Open each test in a new tab. The extension should detect and block/alert for the scenarios below.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Typosquat / Brand Impersonation</h3>
+      <p>Page displays a brand logo and password field on a non-official domain (should be blocked).</p>
+      <a class="btn" href="typosquat_login.html" target="_blank">Open Typosquat Login</a>
+      <small>Triggers: brand visuals + password field, SLD impersonation</small>
+    </div>
+
+    <div class="card">
+      <h3>Credential Exfil Form (supabase-like)</h3>
+      <p>Form that appears to POST credentials to a supabase-like endpoint (should be blocked).</p>
+      <a class="btn" href="exfil_form.html" target="_blank">Open Exfil Form</a>
+      <small>Triggers: external DB indicators + credential fields</small>
+    </div>
+
+    <div class="card">
+      <h3>Shortener / Tunner redirect (meta refresh)</h3>
+      <p>Redirects via meta-refresh to a tunneler/shortener host (escalate / block).</p>
+      <a class="btn" href="shortener_meta.html" target="_blank">Open Shortener Redirect</a>
+      <small>Triggers: meta-refresh -> tunneler (trycloudflare/loclx)</small>
+    </div>
+
+    <div class="card">
+      <h3>Drive-by Download (programmatic)</h3>
+      <p>Auto-creates a Blob and triggers a download (should be canceled by downloads protection).</p>
+      <a class="btn" href="auto_download_js.html" target="_blank">Open Download Test</a>
+      <small>Triggers: programmatic download, suspicious filename</small>
+    </div>
+
+    <div class="card">
+      <h3>Popup Chain Attack</h3>
+      <p>Opener spawns a child popup that navigates to a malicious/impersonation host. Extension should neutralize source.</p>
+      <a class="btn" href="popup_chain.html" target="_blank">Open Popup Chain</a>
+      <small>Triggers: popup spawn -> suspicious host</small>
+    </div>
+
+    <div class="card">
+      <h3>Iframe Phishing</h3>
+      <p>Embed an iframe that contains a credential form. Extension should inspect and block.</p>
+      <a class="btn" href="iframe_phish.html" target="_blank">Open Iframe Phish</a>
+      <small>Triggers: embedded credential harvesting</small>
+    </div>
+
+    <div class="card">
+      <h3>Cloaked Anchor</h3>
+      <p>Visible link text says "paypal.com" but href points elsewhere (anchor cloaking detection).</p>
+      <a class="btn" href="cloaked_anchor2.html" target="_blank">Open Cloaked Anchor</a>
+      <small>Triggers: anchor text vs href mismatch</small>
+    </div>
+
+    <div class="card">
+      <h3>Obfuscated JS Redirect</h3>
+      <p>Performs timed, obfuscated JS redirect. Extension should catch redirect behavior.</p>
+      <a class="btn" href="obfuscated_redirect.html" target="_blank">Open Obfuscated Redirect</a>
+      <small>Triggers: suspicious JS redirect behavior</small>
+    </div>
+  </div>
+</body>
+</html>

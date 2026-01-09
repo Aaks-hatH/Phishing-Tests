@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Cloaked Anchor Test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>body{font-family:Arial;padding:30px;background:#fff} a{display:block;margin:12px 0;padding:12px;border-radius:6px;background:#f1f5f9;color:#046; text-decoration:none}</style>
+</head>
+<body>
+  <h2>Anchor Cloaking</h2>
+  <p>The visible link text below claims to be the official PayPal site, but the href points elsewhere.</p>
+
+  <a href="http://paypal-secure-verification.net" id="cloaked">https://www.paypal.com</a>
+  <p><small>Should trigger anchor cloaking detection.</small></p>
+</body>
+</html>

